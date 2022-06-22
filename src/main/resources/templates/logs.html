@@ -1,7 +1,10 @@
 <header th:replace="_header"> </header>
 
 		<div class="col-md-12 border p-3">
-      		<table class="table table-striped table-hover">
+			<span th:if="${logs.isEmpty()}">
+				<span>No Data Available</span>
+			</span>
+      		<table th:if="${logs.size()}" class="table table-striped table-hover">
 
 			  <thead>
 			    <tr>
@@ -14,9 +17,6 @@
 			  </thead>
   
 		    <tbody>
-			    <tr th:if="${logs.isEmpty()}">
-		            <td colspan="3"> No Books Available </td>
-		        </tr>
 		        <tr th:each="log : ${logs}">
 		        	<td><span th:text="${logStat.index}"></span></td>
 		            <td><a th:href="@{/logs/} + ${log.id}"><span th:text="${log.id}"> </span></a></td>
