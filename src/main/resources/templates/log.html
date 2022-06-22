@@ -1,0 +1,32 @@
+<th:block th:include="/_header"></th:block>
+
+	<div class="col-md-12 border p-3">
+		<div class="my-3"><h2>Log Details</h2></div>
+		<table class="table table-bordered border-secondary table-striped w-50">
+			<tbody>
+			    <tr th:if="${log.equals('')}">
+		            <td colspan="2">Log Not Available </td>
+		        </tr>
+		        <tr>
+		            <th>Id</th><td><span th:text="${log.id}"> </span></a></td>
+		        </tr>
+		        <tr>
+		            <th>Hostname</th><td><span th:text="${log.hostname}"> </span></td>
+		        </tr>
+		        <tr>
+		            <th>Start Time</th><td><span th:text="${log.startTime}"> </span></td>
+		        </tr>
+		        <tr>
+		            <th>Start Time Local</th><td><span th:text="${log.startTimeLocal}"> </span></td>
+		        </tr>
+		        <tr>
+		            <th>PID</th><td><span th:text="${log.pid}"> </span></td>
+		        </tr>
+		    </tbody>
+		</table>
+		    
+		<a class="m-2 btn btn-outline-dark" href="/logs">Back</a>
+		
+	</div>
+	
+<th:block th:include="/_footer"></th:block>
