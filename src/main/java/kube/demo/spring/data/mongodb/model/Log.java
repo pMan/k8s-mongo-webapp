@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Log {
 	@Id
 	private String id;
-
+	
 	private String hostname;
 	private Date startTime;
 	private String startTimeLocal;
