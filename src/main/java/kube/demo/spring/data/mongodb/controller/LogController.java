@@ -24,12 +24,12 @@ import kube.demo.spring.data.mongodb.repository.LogRepository;
 @RequestMapping("/")
 public class LogController {
 
-	private String db = System.getenv().getOrDefault("MONGO_DBNAME", "local");
-	private String user = System.getenv().getOrDefault("MONGO_USER", "adminuser");
-	private String pass = System.getenv().getOrDefault("MONGO_PASS", "password123");
-	private String collection = System.getenv().getOrDefault("MONGO_COLLECTION", "startup_log");
-	private String host = System.getenv().getOrDefault("MONGO_HOST", "192.168.190.135");
-	private String port = System.getenv().getOrDefault("MONGO_PORT", "32000");
+	private String db = System.getenv("MONGO_DBNAME");
+	private String user = System.getenv("MONGO_USER");
+	private String pass = System.getenv("MONGO_PASS");
+	private String collection = System.getenv("MONGO_COLLECTION");
+	private String host = System.getenv("MONGO_HOST");
+	private String port = System.getenv("MONGO_PORT");
 	
 	private String getConnString() {
 		return "mongodb://" + user + ":" + pass + "@" + host + ":" + port + "/" + db + "?authSource=admin";
