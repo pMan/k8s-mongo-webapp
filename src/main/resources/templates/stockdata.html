@@ -4,7 +4,13 @@
 			<span th:if="${data.isEmpty()}">
 				<span>No Data Available</span>
 			</span>
-      		<table th:if="${data.size()}" class="table table-striped table-hover">
+			
+			<div th:if="${data.size()}" class="alert alert-secondary alert-dismissible fade show" role="alert">
+  				<strong th:text="${data.size()} + ' records found.'"></strong>
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+			
+      		<table th:if="${data.size()}" class="my-3 border table table-striped table-hover">
 
 			  <thead>
 			    <tr>
