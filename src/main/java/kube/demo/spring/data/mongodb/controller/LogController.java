@@ -61,7 +61,7 @@ public class LogController {
 		
 		try {
 			MongoOperations mongoOps = new MongoTemplate(new SimpleMongoClientDatabaseFactory(getConnString()));
-			logs = mongoOps.findAll(Log.class, "startup_log").subList(0, 500);
+			logs = mongoOps.findAll(Log.class, "startup_log");
     
 			if (logs.isEmpty()) {
 				model.addAttribute("logs", "");
@@ -75,18 +75,18 @@ public class LogController {
 	}
 
 
-	@GetMapping("/stock")
-	public String getAllStockData(Model model) {
+	@GetMapping("/stock/{count}")
+	public String getAllStockData(@PathVariable String count, Model model) {
 		List<StockData> stockData = new ArrayList<StockData>();
 		
 		try {
 			MongoOperations mongoOps = new MongoTemplate(new SimpleMongoClientDatabaseFactory(getConnString()));
 			Sort s = Sort.by(Sort.Direction.DESC, "currentTime");
-			Query q = new Query().with(s).limit(100);
+			Query q = new Query().with(s).limit(Integer.parseInt(count));
 			stockData = mongoOps.find(q, StockData.class, "nse_data");
     
 			if (stockData.isEmpty()) {
-				model.addAttribute("data", "");
+				model.addAttribute("datalist", "");
 			}
 
 		} catch (Exception e) {

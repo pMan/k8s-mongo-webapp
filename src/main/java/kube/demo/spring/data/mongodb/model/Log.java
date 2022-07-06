@@ -17,13 +17,6 @@ public class Log {
 
 	public Log() { }
 
-	public Log(String hostname, Date startTime, String startTimeLocal, Integer pid) {
-		this.hostname = hostname;
-		this.startTime = startTime;
-		this.startTimeLocal = startTimeLocal;
-		this.pid = pid;
-	}
-
 	public String getId() {
 		return id;
 	}

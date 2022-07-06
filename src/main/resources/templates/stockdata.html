@@ -1,12 +1,12 @@
 <header th:replace="_header"> </header>
 
 		<div class="col-md-12 border p-3">
-			<span th:if="${data.isEmpty()}">
+			<span th:if="${datalist.isEmpty()}">
 				<span>No Data Available</span>
 			</span>
 			
-			<div th:if="${data.size()}" class="alert alert-secondary alert-dismissible fade show" role="alert">
-  				<strong th:text="${data.size()} + ' records found.'"></strong>
+			<div th:if="${datalist.size()}" class="alert alert-secondary alert-dismissible fade show" role="alert">
+  				<strong th:text="'Showing ' + ${datalist.size()} + ' recent records.'"></strong>
 				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 			</div>
 			
@@ -26,7 +26,7 @@
     function drawChart() {
 
 	var data = new google.visualization.DataTable();
-	data.addColumn('date', 'Day');
+	data.addColumn('date', 'Time');
 	//data.addColumn('number', 'Opening value');
 	//data.addColumn('number', 'High');
 	//data.addColumn('number', 'Low');
@@ -45,7 +45,13 @@
           subtitle: 'in rupees (INR)'
         },
         width: 900,
-        height: 500
+        height: 500,
+        vAxis: {
+	      scaleType: 'log'
+	    },
+	    hAxis: {
+	      type: 'Time'
+	    }
       };
 
       var chart = new google.charts.Line(document.getElementById('linechart_material'));
@@ -54,18 +60,18 @@
     }
   </script>
 
-  <div  class="my-3 border table table-striped table-hover" id="linechart_material"></div>
+  <div  class="my-3 border p-3 border-secondary border-1" id="linechart_material"></div>
 
 
 
 
 			
 			
-      		<table th:if="${data.size()}" class="my-3 border table table-striped table-hover">
+      		<table th:if="${datalist.size()}" class="my-3 border table table-striped table-hover border-secondary">
 
 			  <thead>
 			    <tr>
-			      <th scope="col">Date</th>
+			      <th scope="col">Time</th>
 			      <th scope="col">Symbol</th>
 			      <th scope="col">Open</th>
 			      <th scope="col">High</th>
@@ -77,7 +83,8 @@
 		    <tbody>
 		        <tr th:each="log : ${data}">
 		        	<!--td><span th:text="${logStat.index}"></span></td-->
-		        	<td><span th:text="${log.currentTime}"></span></td>
+		        	<!--td><span th:text="${log.currentTime}"></span></td-->
+		        	<td><span th:text="${#dates.format(log.currentTime, 'HH:mm:ss a')}"></span></td>
 		            <td><span th:text="${log.StockName}"> </span></td>
 		            <td><span th:text="${log.Open}"> </span></td>
 		            <td><span th:text="${log.High}"> </span></td>
