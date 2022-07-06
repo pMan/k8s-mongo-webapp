@@ -4,25 +4,20 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
-import org.springframework.data.mongodb.core.aggregation.SortOperation;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import kube.demo.spring.data.mongodb.model.Log;
 import kube.demo.spring.data.mongodb.model.StockData;
-import kube.demo.spring.data.mongodb.repository.LogRepository;
 
-@CrossOrigin(origins = "http://localhost:8081")
 @Controller
 @RequestMapping("/")
 public class LogController {
@@ -52,9 +47,6 @@ public class LogController {
 		return "[db=" + db + ", user=" + user + ", pass=" + pass + ", collection=" + collection
 				+ ", host=" + host + ", port=" + port + "]";
 	}
-
-	@Autowired
-	LogRepository logRepository;
 
 	@GetMapping("/")
 	public String index() {
