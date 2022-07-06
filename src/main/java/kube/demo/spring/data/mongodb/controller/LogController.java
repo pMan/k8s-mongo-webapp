@@ -1,13 +1,15 @@
 package kube.demo.spring.data.mongodb.controller;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
-import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.aggregation.SortOperation;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import kube.demo.spring.data.mongodb.model.Log;
 import kube.demo.spring.data.mongodb.model.StockData;
@@ -37,8 +38,9 @@ public class LogController {
 	private String db = "local";
 	private String user = "adminuser";
 	private String pass = "password123";
-	private String collection = "MONGO_COLLECTION";
-	private String host = "a22437652ec75464b9aec75355b895fe-699670675.us-east-2.elb.amazonaws.com";
+	private String collection = "nse_data";
+	//private String host = "a22437652ec75464b9aec75355b895fe-699670675.us-east-2.elb.amazonaws.com";
+	private String host = "localhost";
 	private String port = "27017";
 	
 	private String getConnString() {
@@ -66,7 +68,7 @@ public class LogController {
 		
 		try {
 			MongoOperations mongoOps = new MongoTemplate(new SimpleMongoClientDatabaseFactory(getConnString()));
-			logs = mongoOps.findAll(Log.class, "startup_log");
+			logs = mongoOps.findAll(Log.class, "startup_log").subList(0, 500);
     
 			if (logs.isEmpty()) {
 				model.addAttribute("logs", "");
@@ -86,7 +88,9 @@ public class LogController {
 		
 		try {
 			MongoOperations mongoOps = new MongoTemplate(new SimpleMongoClientDatabaseFactory(getConnString()));
-			stockData = mongoOps.findAll(StockData.class, "MONGO_COLLECTION");
+			Sort s = Sort.by(Sort.Direction.ASC, "currentTime");
+			Query q = new Query().with(s);
+			stockData = mongoOps.find(q, StockData.class, "nse_data");
     
 			if (stockData.isEmpty()) {
 				model.addAttribute("data", "");
@@ -95,7 +99,27 @@ public class LogController {
 		} catch (Exception e) {
 			return e.getMessage();
 		}
+		
+		Instant now = Instant.now();
+		//Instant yesterday = now.minus(1, ChronoUnit.DAYS);
+		
+		List<Object> datalist = new ArrayList<>();
+		for (StockData s : stockData) {
+			List<Object> list = new ArrayList<>();
+			//yesterday = yesterday.plus(1, ChronoUnit.DAYS);
+			list.add(s.getCurrentTime());
+			//list.add(s.getOpen());
+			//list.add(s.getHigh());
+			//list.add(s.getLow());
+			list.add(s.getClose());
+			//list.add(s.getAdjClose());
+			//list.add(new Double(s.getVolume()));
+			//list.add(s.getStockName());
+			datalist.add(list);
+		}
+		
 		model.addAttribute("data", stockData);
+		model.addAttribute("datalist", datalist);
 		return "stockdata";
 	}
 

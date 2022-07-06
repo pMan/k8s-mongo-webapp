@@ -1,5 +1,7 @@
 package kube.demo.spring.data.mongodb.model;
 
+import java.util.Date;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -8,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class StockData {
 	@Id
 	public ObjectId id;
-
+	public Date currentTime;
 	public Double Open;
 	public Double High;
 	public Double Low;
@@ -17,6 +19,19 @@ public class StockData {
 	public Integer Volume;
 	public String StockName;
 	
+	
+	/**
+	 * @return the currentTime
+	 */
+	public Date getCurrentTime() {
+		return currentTime;
+	}
+	/**
+	 * @param currentTime the currentTime to set
+	 */
+	public void setCurrentTime(Date currentTime) {
+		this.currentTime = currentTime;
+	}
 	/**
 	 * @return the id
 	 */
@@ -118,8 +133,8 @@ public class StockData {
 	 */
 	@Override
 	public String toString() {
-		return "StockData [id=" + id + ", Open=" + Open + ", High=" + High + ", Low=" + Low + ", Close=" + Close
-				+ ", AdjClose=" + AdjClose + ", Volume=" + Volume + ", StockName=" + StockName + "]";
+		return "[" + Open + "," + High + "," + Low + "," + Close
+				+ "," + AdjClose + "," + Volume + "]";
 	}
 	
 	
