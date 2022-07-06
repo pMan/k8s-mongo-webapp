@@ -34,9 +34,10 @@ public class LogController {
 	private String user = "adminuser";
 	private String pass = "password123";
 	private String collection = "nse_data";
-	//private String host = "a22437652ec75464b9aec75355b895fe-699670675.us-east-2.elb.amazonaws.com";
-	private String host = "localhost";
+	private String host = "a22437652ec75464b9aec75355b895fe-699670675.us-east-2.elb.amazonaws.com";
+	//private String host = "localhost";
 	private String port = "27017";
+	
 	
 	private String getConnString() {
 		return "mongodb://" + user + ":" + pass + "@" + host + ":" + port + "/" + db + "?authSource=admin";
