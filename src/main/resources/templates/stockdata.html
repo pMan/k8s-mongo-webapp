@@ -45,10 +45,7 @@
           subtitle: 'in rupees (INR)'
         },
         width: 900,
-        height: 500,
-        vAxis: {
-	      scaleType: 'log'
-	    }
+        height: 500
       };
 
       var chart = new google.charts.Line(document.getElementById('linechart_material'));
@@ -68,7 +65,7 @@
 
 			  <thead>
 			    <tr>
-			      <th scope="col">#</th>
+			      <th scope="col">Date</th>
 			      <th scope="col">Symbol</th>
 			      <th scope="col">Open</th>
 			      <th scope="col">High</th>
@@ -79,8 +76,8 @@
   
 		    <tbody>
 		        <tr th:each="log : ${data}">
-		        	<td><span th:text="${logStat.index}"></span></td>
-		        	<!-- td><span th:text="${log.id}"></span></td -->
+		        	<!--td><span th:text="${logStat.index}"></span></td-->
+		        	<td><span th:text="${log.currentTime}"></span></td>
 		            <td><span th:text="${log.StockName}"> </span></td>
 		            <td><span th:text="${log.Open}"> </span></td>
 		            <td><span th:text="${log.High}"> </span></td>
