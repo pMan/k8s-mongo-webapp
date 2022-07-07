@@ -93,21 +93,18 @@ public class LogController {
 			return e.getMessage();
 		}
 		
-		Instant now = Instant.now();
-		//Instant yesterday = now.minus(1, ChronoUnit.DAYS);
-		
 		List<Object> datalist = new ArrayList<>();
 		for (StockData s : stockData) {
 			List<Object> list = new ArrayList<>();
-			//yesterday = yesterday.plus(1, ChronoUnit.DAYS);
 			list.add(s.getCurrentTime());
-			//list.add(s.getOpen());
-			//list.add(s.getHigh());
-			//list.add(s.getLow());
-			list.add(s.getClose());
-			//list.add(s.getAdjClose());
-			//list.add(new Double(s.getVolume()));
-			//list.add(s.getStockName());
+			if ("INFY.NS".equals(s.getStockName())) {
+				list.add(null);
+				list.add(s.getClose());
+			} else {
+				list.add(s.getClose());
+				list.add(null);
+			}
+			
 			datalist.add(list);
 		}
 		
