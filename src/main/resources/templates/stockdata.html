@@ -1,99 +1,91 @@
 <header th:replace="_header"> </header>
 
 		<div class="col-md-12 border p-3">
-			<span th:if="${datalist.isEmpty()}">
+			<span th:if="${infylist.isEmpty()}">
 				<span>No Data Available</span>
 			</span>
 			
-			<div th:if="${datalist.size()}" class="alert alert-secondary alert-dismissible fade show" role="alert">
-					<strong th:text="'Showing ' + ${datalist.size()} + ' recent records.'"></strong>
+			<div th:if="${infylist.size()}" class="alert alert-secondary alert-dismissible fade show" role="alert">
+					<strong th:text="'Showing ' + ${infylist.size()} + ' recent records.'"></strong>
 				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 			</div>
 			
 			
 			
 			
-<script th:inline="javascript">
-/*<![CDATA[*/
-	var datalist = /*[[${datalist}]]*/[[]];
-/*]]>*/
-</script>
-
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-
-	datalist.forEach((x, i) => {
-		x[0] = new Date(x[0])
-	});
-	console.log(datalist);
-	
-	google.charts.load('current', {'packages':['line']});
-	google.charts.setOnLoadCallback(drawChart);
-
-	function drawChart() {
-	
-		var data = new google.visualization.DataTable();
-		data.addColumn('date', 'Time');
-		data.addColumn('number', 'TCS');
-		data.addColumn('number', 'INFY');
-		
-		data.addRows(datalist);
-	
-		var options = {
-			curveType: 'function',
-			chart: {
-				title: 'NSE closing figures for selected IT companies',
-				subtitle: 'in Rupees (INR)',
-				interpolateNulls: true
-			},
-			width: 900,
-			height: 500,
-			vAxis: {
-				scaleType: 'log'
-			},
-			hAxis: {
-				type: 'Time'
-			}
-		};
-	
-		var chart = new google.charts.Line(document.getElementById('linechart_material'));
-		chart.draw(data, google.charts.Line.convertOptions(options));
-	}
+	<script th:inline="javascript">
+	/*<![CDATA[*/
+		var infylist = /*[[${infylist}]]*/[[]];
+		var tcslist = /*[[${tcslist}]]*/[[]];
+	/*]]>*/
 	</script>
 
-	<div	class="my-3 border p-3 border-secondary border-1" id="linechart_material"></div>
 
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+		google.charts.load('current', {'packages':['line']});
+		google.charts.setOnLoadCallback(drawChartTcs);
+		google.charts.setOnLoadCallback(drawChartInfy);
 
+		infylist.forEach((x, i) => {
+			d = x[0].split(' ').map(Number);
+			x[0] = new Date(d[0], d[1], d[2], d[3], d[4])
+		});
+		tcslist.forEach((x, i) => {
+			d = x[0].split(' ').map(Number);
+			x[0] = new Date(d[0], d[1], d[2], d[3], d[4])
+		});
 
-
-			
-			
-				<table th:if="${datalist.size()}" class="my-3 border table table-striped table-hover border-secondary">
-
-				<thead>
-				<tr>
-					<th scope="col">Time</th>
-					<th scope="col">Symbol</th>
-					<th scope="col">Open</th>
-					<th scope="col">High</th>
-					<th scope="col">Low</th>
-					<th scope="col">Close</th>
-				</tr>
-				</thead>
+		function drawChartTcs() {
+			var data = new google.visualization.DataTable();
+			data.addColumn('date', 'Day');
+			data.addColumn('number', 'TCS');
+			//data.addColumn('number', 'Transformers: Age of Extinction');
 	
-			<tbody>
-				<tr th:each="log : ${data}">
-					<!--td><span th:text="${logStat.index}"></span></td-->
-					<!--td><span th:text="${log.currentTime}"></span></td-->
-					<td><span th:text="${#dates.format(log.currentTime, 'HH:mm:ss a')}"></span></td>
-					<td><span th:text="${log.StockName}"> </span></td>
-					<td><span th:text="${log.Open}"> </span></td>
-					<td><span th:text="${log.High}"> </span></td>
-					<td><span th:text="${log.Low}"> </span></td>
-					<td><span th:text="${log.Close}"> </span></td>
-				</tr>
-			</tbody>
-				</table>
+			data.addRows(tcslist);
+	
+			var options = {
+				chart: {
+					//interpolateNulls: true,
+					title: 'Current NSE trends - TCS',
+					subtitle: 'in rupees (INR)'
+				},
+				width: 900,
+				height: 400
+			};
+			var chart = new google.charts.Line(document.getElementById('linechart_tcs'));
+			chart.draw(data, google.charts.Line.convertOptions(options));
+		}
+		
+		function drawChartInfy() {
+			var data = new google.visualization.DataTable();
+			data.addColumn('date', 'Day');
+			data.addColumn('number', 'INFY');
+			//data.addColumn('number', 'Transformers: Age of Extinction');
+	
+			data.addRows(infylist);
+	
+			var options = {
+				chart: {
+					//interpolateNulls: true,
+					title: 'Current NSE trends - Infosys',
+					subtitle: 'in rupees (INR)'
+				},
+				width: 900,
+				height: 400
+			};
+			var chart = new google.charts.Line(document.getElementById('linechart_infy'));
+			chart.draw(data, google.charts.Line.convertOptions(options));
+		}
+		
+		</script>
+		<div id="linechart_tcs" class="m-2 p-5 border border-warning" ></div>
+		<div id="linechart_infy" class="m-2 p-5 border border-warning" ></div>
+	
+
+			
+			
+				
 			</div>
 	
 <footer th:replace="_footer"></footer>
