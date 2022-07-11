@@ -3,8 +3,10 @@ package kube.demo.spring.data.mongodb.controller;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.TreeMap;
 
 import org.springframework.data.domain.Sort;
@@ -101,11 +103,20 @@ public class LogController {
 		Map<String, Double[]> data = new TreeMap<>();
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy M dd HH mm");
+		sdf.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
 		for (StockData stockDoc : stockData) {
-			String currentMinuteKey = sdf.format(stockDoc.getId().getDate());
+			Date date = stockDoc.getId().getDate();
+			String currentMinuteKey = sdf.format(date);
+			try{
+				if (sdf.parse(currentMinuteKey).getDate() != sdf.parse(sdf.format(new Date())).getDate())
+					continue;	
+			} catch(Exception e) {
+				continue;
+			}
+					
 			Double[] list = data.get(currentMinuteKey);
 			if (list == null )
-				list = new Double[2];  
+				list = new Double[2];
 			
 			//list.add(s.getCurrentTime());
 			if ("INFY.NS".equals(stockDoc.getStockName())) {
@@ -113,7 +124,7 @@ public class LogController {
 			} else if ("TCS.NS".equals(stockDoc.getStockName())) {
 				list[0] = stockDoc.getClose();
 			}
-			//System.out.println(list[0] + "," + list[1]);
+			System.out.println(currentMinuteKey);
 			data.put(currentMinuteKey, list);
 		}
 		
